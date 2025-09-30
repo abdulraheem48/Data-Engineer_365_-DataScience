@@ -1,0 +1,140 @@
+<!--
+Private Classes - GitHub Pages Template
+Instructions:
+1. Put this file as `index.html` in the root of your GitHub repo.
+2. Create folders for each class (e.g. /class1/, /class2/) and put video (.mp4) and PDFs there.
+   - If a video is larger than 100MB, upload it to Google Drive/Dropbox and use the shared link (see note below).
+3. If using external links (Google Drive), paste the direct file URL where indicated in the template.
+4. Enable GitHub Pages on the repo (Settings → Pages → main branch → /root).
+
+Notes on Google Drive direct links:
+- To embed a Drive video you may need a direct link or use an <iframe> with the Drive preview link.
+- For privacy, keep the repo unlisted and share the Pages link only with intended viewers.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Private Classes</title>
+  <style>
+    :root{--accent:#0b5cff;--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#0f172a;background:var(--bg)}
+    .container{max-width:1100px;margin:28px auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header h1{margin:0;font-size:20px}
+    .grid{display:grid;grid-template-columns:280px 1fr;gap:18px}
+    .sidebar{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(15,23,42,0.06)}
+    .courses{list-style:none;padding:0;margin:0}
+    .courses li{padding:10px;border-radius:8px;cursor:pointer}
+    .courses li:hover{background:#f1f5ff}
+    .courses li.active{background:linear-gradient(90deg,var(--accent),#6ea7ff22);font-weight:600}
+    .main{background:var(--card);border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(15,23,42,0.06)}
+    .lesson{margin-bottom:20px}
+    .lesson h3{margin:6px 0;font-size:16px}
+    .meta{color:var(--muted);font-size:13px}
+    video{max-width:100%;border-radius:8px;background:#000}
+    a.btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;background:var(--accent);color:#fff}
+    .pdf-link{display:inline-block;margin-top:8px}
+    @media(max-width:800px){.grid{grid-template-columns:1fr}.sidebar{order:2}.main{order:1}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>My Private Classes</h1>
+      <div class="right">Share this page link only with your students</div>
+    </header>
+
+    <div class="grid">
+      <aside class="sidebar">
+        <h4>Classes</h4>
+        <ul class="courses" id="classList">
+          <!-- Edit these items to match your folder names -->
+          <li data-class="class1" class="active">Class 1: Basics</li>
+          <li data-class="class2">Class 2: Advanced</li>
+          <li data-class="class3">Class 3: Notes Only</li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <div id="content">
+          <!-- Content for selected class will be injected here -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    /* === CONFIG: Edit the structure below to match your files ===
+       For each class (key), add an array of lessons. Each lesson is an object:
+         { title: 'Lesson title', video: 'path or external URL or null', pdf: 'path or external URL or null', notes: 'short note' }
+       If using GitHub-hosted files, use relative paths like 'class1/lesson1.mp4' or 'class3/notes.pdf'.
+    */
+
+    const CLASSES = {
+      'class1': [
+        { title: 'Lesson 1 — Video + PDF', video: 'class1/lesson1.mp4', pdf: 'class1/notes1.pdf', notes: 'Introduction' },
+        { title: 'Lesson 2 — Video only', video: 'class1/lesson2.mp4', pdf: null, notes: 'Demo' }
+      ],
+      'class2': [
+        { title: 'Lesson 1 — Video only', video: 'class2/lesson1.mp4', pdf: null, notes: 'Advanced topic' }
+      ],
+      'class3': [
+        { title: 'Lesson 1 — PDF only', video: null, pdf: 'class3/notes1.pdf', notes: 'Reference material' }
+      ]
+    };
+
+    // If a video file is too large for GitHub (>100MB), upload it to Google Drive/Dropbox and replace the video field
+    // with the external URL. Example: 'https://drive.google.com/uc?export=download&id=FILE_ID' or an embeddable preview iframe.
+
+    const contentEl = document.getElementById('content');
+    const listEl = document.getElementById('classList');
+
+    function renderClass(classKey){
+      const lessons = CLASSES[classKey] || [];
+      let html = '';
+      if(lessons.length === 0) html = '<p>No lessons added yet.</p>';
+      lessons.forEach((l, idx) =>{
+        html += `<section class="lesson">
+          <h3>${idx+1}. ${escapeHtml(l.title)}</h3>
+          <div class="meta">${escapeHtml(l.notes || '')}</div>`;
+        if(l.video){
+          // If the video is an external iframe link (e.g., Google Drive preview), you can handle it here. For simple direct video files use <video> tag.
+          if(isExternal(l.video)){
+            // For external previewable links, embed in iframe
+            html += `<div style="margin-top:8px"><iframe src="${l.video}" width="100%" height="480" frameborder="0" allowfullscreen></iframe></div>`;
+          } else {
+            html += `<div style="margin-top:8px"><video controls controlsList="nodownload" preload="metadata">
+              <source src="${l.video}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video></div>`;
+          }
+        }
+        if(l.pdf){
+          html += `<div class="pdf-link"><a href="${l.pdf}" target="_blank" class="btn">Open / Download PDF</a></div>`;
+        }
+        html += `</section>`;
+      });
+
+      contentEl.innerHTML = html;
+    }
+
+    function isExternal(url){
+      return url.startsWith('http://') || url.startsWith('https://');
+    }
+
+    function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]; }); }
+
+    // wire up click handlers
+    listEl.addEventListener('click', e =>{
+      const li = e.target.closest('li'); if(!li) return;
+      const key = li.dataset.class; Array.from(listEl.children).forEach(x=>x.classList.remove('active')); li.classList.add('active'); renderClass(key);
+    });
+
+    // initial render
+    renderClass('class1');
+  </script>
+</body>
+</html>
