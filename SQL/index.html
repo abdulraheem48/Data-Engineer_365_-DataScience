@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private Class</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+    .sidebar {
+      width: 320px;
+      background: #f4f4f4;
+      padding: 20px;
+      overflow-y: auto;
+      border-right: 1px solid #ddd;
+    }
+    .content {
+      flex: 1;
+      padding: 20px;
+      background: #fff;
+      overflow-y: auto;
+    }
+    .lesson {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+    .lesson:hover {
+      background: #eaeaea;
+    }
+    .lesson-title {
+      font-weight: bold;
+    }
+    video, iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h3>📘 Introduction to Databases, SQL, and MySQL</h3>
+    <div id="lessons"></div>
+  </div>
+
+  <div class="content" id="lessonContent">
+    <h2>Select a lesson from the left</h2>
+  </div>
+
+  <script>
+    const lessons = [
+      { type: "gdrive", title: "Welcome to SQL", time: "03:59", file: "1MmbU6UZayFXQFBNzfzuPg920mxyJ4pQ9" },
+      { type: "pdf", title: "Resources - Welcome to SQL", file: "1WbMQ05LoKPMco0JeGFLvregv862JD7lN" },
+
+      { type: "gdrive", title: "Why SQL?", time: "03:17", file: "1hf-V9tKuwTiq0dAm0mzlsMyGHV-4_k2h" },
+      { type: "pdf", title: "Resources - Why SQL?", file: "1OeMH0BehpQH4m2YEiOOVRmEC8aZ7sszT" },
+
+      { type: "gdrive", title: "Why MySQL?", time: "01:57", file: "1RFnMy1R9yhhR2HKRamoZ0LnDujgQjmjQ" },
+      { type: "gdrive", title: "Introduction to databases", time: "04:44", file: "15IpJ-tTMgG9fjM9p6xul1-AtyaVuAjky" }
+    ];
+
+    const lessonsContainer = document.getElementById("lessons");
+    const lessonContent = document.getElementById("lessonContent");
+
+    lessons.forEach((lesson) => {
+      const div = document.createElement("div");
+      div.classList.add("lesson");
+      div.innerHTML = `
+        <div class="lesson-title">✔ ${lesson.title}</div>
+        ${lesson.type === "gdrive" ? `▶ Lesson - ${lesson.time}` : "📂 Resource"}
+      `;
+      div.onclick = () => loadLesson(lesson);
+      lessonsContainer.appendChild(div);
+    });
+
+    function loadLesson(lesson) {
+      if (lesson.type === "gdrive") {
+        lessonContent.innerHTML = `
+          <h2>${lesson.title}</h2>
+          <iframe src="https://drive.google.com/file/d/${lesson.file}/preview" allow="autoplay"></iframe>
+        `;
+      } else if (lesson.type === "pdf") {
+        lessonContent.innerHTML = `
+          <h2>${lesson.title}</h2>
+          <iframe src="https://drive.google.com/file/d/${lesson.file}/preview"></iframe>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
