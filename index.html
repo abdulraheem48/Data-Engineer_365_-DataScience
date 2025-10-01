@@ -39,6 +39,7 @@
     }
     .lesson-info {
       max-width: 70%;
+      cursor: pointer;
     }
     .lesson-title {
       font-weight: bold;
@@ -72,7 +73,7 @@
       border-radius: 6px;
       box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
       z-index: 100;
-      min-width: 160px;
+      min-width: 200px;
     }
     .resource-dropdown a {
       display: block;
@@ -108,7 +109,7 @@
         time: "03:59", 
         file: "https://drive.google.com/file/d/1MmbU6UZayFXQFBNzfzuPg920mxyJ4pQ9/preview",
         resources: [
-          {name: "PDF Notes", link: "https://drive.google.com/file/d/1WbMQ05LoKPMco0JeGFLvregv862JD7lN/preview"}
+          {name: "⬇ SQL - Course Notes", link: "https://drive.google.com/uc?export=download&id=1WbMQ05LoKPMco0JeGFLvregv862JD7lN"}
         ]
       },
       { 
@@ -117,7 +118,7 @@
         time: "03:17", 
         file: "https://drive.google.com/file/d/1hf-V9tKuwTiq0dAm0mzlsMyGHV-4_k2h/preview",
         resources: [
-          {name: "Slides", link: "https://drive.google.com/file/d/1OeMH0BehpQH4m2YEiOOVRmEC8aZ7sszT/preview"}
+          {name: "⬇ SQL FAQ", link: "https://drive.google.com/uc?export=download&id=1OeMH0BehpQH4m2YEiOOVRmEC8aZ7sszT"}
         ]
       },
       { 
@@ -149,7 +150,7 @@
         <div class="resource-btn">
           <button onclick="toggleDropdown(event, ${index})">📂 Resources ▾</button>
           <div class="resource-dropdown" id="dropdown-${index}">
-            ${lesson.resources.map(r => `<a href="${r.link}" target="_blank">${r.name}</a>`).join("")}
+            ${lesson.resources.map(r => `<a href="${r.link}" download>${r.name}</a>`).join("")}
           </div>
         </div>
         ` : ""}
@@ -178,4 +179,3 @@
   </script>
 </body>
 </html>
-  
